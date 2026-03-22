@@ -43,7 +43,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                sh 'mvn package'
+                bat 'mvn package'
             }
         }
 
