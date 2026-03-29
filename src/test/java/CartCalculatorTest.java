@@ -2,50 +2,74 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CartCalculatorTest {
 
-    private final CartCalculator calculator = new CartCalculator();
-
     @Test
-    void shouldCalculateItemTotalCorrectly() {
-        double result = calculator.calculateItemTotal(10.0, 3);
-        assertEquals(30.0, result, 0.001);
+    void testCalculateItemTotal() {
+        CartCalculator calculator = new CartCalculator();
+        assertEquals(30.0, calculator.calculateItemTotal(10.0, 3));
     }
 
     @Test
-    void shouldCalculateCartTotalCorrectly() {
+    void testCalculateCartTotal() {
+        CartCalculator calculator = new CartCalculator();
+
         List<CartItem> items = List.of(
-                new CartItem(10.0, 2), // 20
-                new CartItem(5.5, 4),  // 22
-                new CartItem(3.0, 1)   // 3
+                new CartItem(10.0, 2),
+                new CartItem(5.0, 4)
         );
 
-        double result = calculator.calculateCartTotal(items);
-        assertEquals(45.0, result, 0.001);
+        assertEquals(40.0, calculator.calculateCartTotal(items));
     }
 
     @Test
-    void shouldReturnZeroForEmptyCart() {
-        double result = calculator.calculateCartTotal(List.of());
-        assertEquals(0.0, result, 0.001);
+    void testEmptyCart() {
+        CartCalculator calculator = new CartCalculator();
+        assertEquals(0.0, calculator.calculateCartTotal(List.of()));
     }
 
     @Test
-    void shouldThrowExceptionForNegativePrice() {
-        assertThrows(IllegalArgumentException.class, () -> new CartItem(-5.0, 1));
+    void testCartItemGetTotalCost() {
+        CartItem item = new CartItem(12.5, 2);
+        assertEquals(25.0, item.getTotalCost());
     }
 
     @Test
-    void shouldThrowExceptionForNegativeQuantity() {
-        assertThrows(IllegalArgumentException.class, () -> new CartItem(5.0, -1));
+    void testGetPriceAndQuantity() {
+        CartItem item = new CartItem(10.0, 2);
+        assertEquals(10.0, item.getPrice());
+        assertEquals(2, item.getQuantity());
     }
 
     @Test
-    void shouldCalculateCartItemTotal() {
-        CartItem item = new CartItem(7.5, 2);
-        assertEquals(15.0, item.getTotalCost(), 0.001);
+    void testZeroValues() {
+        CartItem item = new CartItem(0.0, 0);
+        assertEquals(0.0, item.getTotalCost());
+    }
+
+    @Test
+    void testLargeValues() {
+        CartItem item = new CartItem(1000.0, 5);
+        assertEquals(5000.0, item.getTotalCost());
+    }
+
+    @Test
+    void testNegativePriceThrowsException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new CartItem(-5.0, 2)
+        );
+        assertEquals("Price cannot be negative.", exception.getMessage());
+    }
+
+    @Test
+    void testNegativeQuantityThrowsException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new CartItem(5.0, -2)
+        );
+        assertEquals("Quantity cannot be negative.", exception.getMessage());
     }
 }
