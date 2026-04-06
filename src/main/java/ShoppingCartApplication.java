@@ -5,7 +5,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class ShoppingCartApplication extends Application {
 
@@ -29,20 +28,22 @@ public class ShoppingCartApplication extends Application {
     }
 
     private static void loadView() throws IOException {
-        ResourceBundle bundle = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-
         FXMLLoader loader = new FXMLLoader(
-                ShoppingCartApplication.class.getResource("/shopping-cart-view.fxml"),
-                bundle
+                ShoppingCartApplication.class.getResource("/shopping-cart-view.fxml")
         );
 
         Scene scene = new Scene(loader.load(), 700, 500);
-        primaryStage.setTitle(bundle.getString("app.title"));
+        primaryStage.setTitle("Shopping Cart");
         primaryStage.setScene(scene);
     }
 
     public static Locale getCurrentLocale() {
         return currentLocale;
+    }
+
+    public static String getCurrentLanguageCode() {
+        Locale locale = getCurrentLocale();
+        return locale.getLanguage() + "_" + locale.getCountry();
     }
 
     public static void main(String[] args) {

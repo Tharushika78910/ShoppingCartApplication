@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.Map;
 
 public class ShoppingCartController {
 
@@ -27,9 +27,29 @@ public class ShoppingCartController {
     @FXML
     private Label cartTotalLabel;
 
+    @FXML
+    private Label languageLabel;
+
+    @FXML
+    private Label numberOfItemsLabel;
+
+    @FXML
+    private Button confirmLanguageButton;
+
+    @FXML
+    private Button enterItemsButton;
+
+    @FXML
+    private Button calculateTotalButton;
+
     private final List<TextField> priceFields = new ArrayList<>();
     private final List<TextField> quantityFields = new ArrayList<>();
     private final List<Label> itemTotalLabels = new ArrayList<>();
+
+    private final LocalizationService localizationService = new LocalizationService();
+    private final CartService cartService = new CartService();
+
+    private Map<String, String> texts;
 
     @FXML
     public void initialize() {
@@ -54,7 +74,27 @@ public class ShoppingCartController {
             languageComboBox.setValue("English");
         }
 
+        loadTexts();
+        applyTexts();
         applyLanguageDirection(current);
+    }
+
+    private void loadTexts() {
+        String languageCode = ShoppingCartApplication.getCurrentLanguageCode();
+        texts = localizationService.getLocalizedStrings(languageCode);
+    }
+
+    private String t(String key, String fallback) {
+        return texts.getOrDefault(key, fallback);
+    }
+
+    private void applyTexts() {
+        languageLabel.setText(t("language.label", "Select Language"));
+        numberOfItemsLabel.setText(t("number.of.items", "Number of Items"));
+        confirmLanguageButton.setText(t("confirm.language", "Confirm Language"));
+        enterItemsButton.setText(t("enter.items", "Enter Items"));
+        calculateTotalButton.setText(t("calculate.total", "Calculate Total"));
+        cartTotalLabel.setText(t("cart.total", "Cart Total:") + " 0.0");
     }
 
     @FXML
@@ -83,32 +123,27 @@ public class ShoppingCartController {
         try {
             count = Integer.parseInt(numberOfItemsField.getText().trim());
             if (count <= 0) {
-                showError("Please enter a number greater than 0.");
+                showError(t("error.number.gt.zero", "Please enter a number greater than 0."));
                 return;
             }
         } catch (NumberFormatException e) {
-            showError("Please enter a valid integer.");
+            showError(t("error.invalid.integer", "Please enter a valid integer."));
             return;
         }
-
-        ResourceBundle bundle = ResourceBundle.getBundle(
-                "MessagesBundle",
-                ShoppingCartApplication.getCurrentLocale()
-        );
 
         Locale current = ShoppingCartApplication.getCurrentLocale();
         boolean isArabic = isArabic(current);
 
         for (int i = 0; i < count; i++) {
-            Label itemLabel = new Label(bundle.getString("item.label") + " " + (i + 1));
+            Label itemLabel = new Label(t("item.label", "Item") + " " + (i + 1));
 
             TextField priceField = new TextField();
-            priceField.setPromptText(bundle.getString("enter.price"));
+            priceField.setPromptText(t("enter.price", "Enter price"));
 
             TextField quantityField = new TextField();
-            quantityField.setPromptText(bundle.getString("enter.quantity"));
+            quantityField.setPromptText(t("enter.quantity", "Enter quantity"));
 
-            Label totalLabel = new Label(bundle.getString("item.total") + " 0.0");
+            Label totalLabel = new Label(t("item.total", "Item Total:") + " 0.0");
 
             if (isArabic) {
                 itemLabel.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
@@ -139,11 +174,6 @@ public class ShoppingCartController {
 
     @FXML
     private void handleCalculateTotal() {
-        ResourceBundle bundle = ResourceBundle.getBundle(
-                "MessagesBundle",
-                ShoppingCartApplication.getCurrentLocale()
-        );
-
         CartCalculator calculator = new CartCalculator();
         List<CartItem> items = new ArrayList<>();
 
@@ -156,15 +186,22 @@ public class ShoppingCartController {
                 items.add(item);
 
                 itemTotalLabels.get(i).setText(
-                        bundle.getString("item.total") + " " + item.getTotalCost()
+                        t("item.total", "Item Total:") + " " + item.getTotalCost()
                 );
             }
 
             double total = calculator.calculateCartTotal(items);
-            cartTotalLabel.setText(bundle.getString("cart.total") + " " + total);
+            cartTotalLabel.setText(t("cart.total", "Cart Total:") + " " + total);
+
+            cartService.saveCart(
+                    total,
+                    ShoppingCartApplication.getCurrentLanguageCode(),
+                    items
+            );
 
         } catch (NumberFormatException e) {
-            showError("Please enter valid numbers for price and quantity.");
+            showError(t("error.invalid.price.quantity",
+                    "Please enter valid numbers for price and quantity."));
         } catch (IllegalArgumentException e) {
             showError(e.getMessage());
         }

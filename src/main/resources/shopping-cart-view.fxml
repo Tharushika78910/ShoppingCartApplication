@@ -19,15 +19,20 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <Label text="%welcome" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <Label text="Shopping Cart"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
-    <Label text="%select.language" />
+    <Label fx:id="languageLabel" text="Select Language" />
     <ComboBox fx:id="languageComboBox" prefWidth="200" />
-    <Button text="%confirm.language" onAction="#handleConfirmLanguage" />
+    <Button fx:id="confirmLanguageButton"
+            text="Confirm Language"
+            onAction="#handleConfirmLanguage" />
 
-    <Label text="%enter.number.of.items" />
+    <Label fx:id="numberOfItemsLabel" text="Number of Items" />
     <TextField fx:id="numberOfItemsField" />
-    <Button text="%enter.items" onAction="#handleEnterItems" />
+    <Button fx:id="enterItemsButton"
+            text="Enter Items"
+            onAction="#handleEnterItems" />
 
     <ScrollPane fitToWidth="true" prefHeight="220">
         <content>
@@ -39,9 +44,11 @@
         </content>
     </ScrollPane>
 
-    <Button text="%calculate.total" onAction="#handleCalculateTotal" />
+    <Button fx:id="calculateTotalButton"
+            text="Calculate Total"
+            onAction="#handleCalculateTotal" />
 
     <Label fx:id="cartTotalLabel"
-           text="%cart.total"
+           text="Cart Total: 0.0"
            style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 </VBox>
