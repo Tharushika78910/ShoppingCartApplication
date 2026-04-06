@@ -13,6 +13,9 @@ import java.util.Map;
 public class ShoppingCartController {
 
     @FXML
+    private Label titleLabel;
+
+    @FXML
     private VBox rootVBox;
 
     @FXML
@@ -89,6 +92,7 @@ public class ShoppingCartController {
     }
 
     private void applyTexts() {
+        titleLabel.setText(t("app.title", "Shopping Cart"));
         languageLabel.setText(t("language.label", "Select Language"));
         numberOfItemsLabel.setText(t("number.of.items", "Number of Items"));
         confirmLanguageButton.setText(t("confirm.language", "Confirm Language"));

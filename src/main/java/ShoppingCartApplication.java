@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Map;
 
 public class ShoppingCartApplication extends Application {
 
@@ -33,8 +34,13 @@ public class ShoppingCartApplication extends Application {
         );
 
         Scene scene = new Scene(loader.load(), 700, 500);
-        primaryStage.setTitle("Shopping Cart");
         primaryStage.setScene(scene);
+
+        LocalizationService localizationService = new LocalizationService();
+        Map<String, String> texts = localizationService.getLocalizedStrings(getCurrentLanguageCode());
+        String appTitle = texts.getOrDefault("app.title", "Shopping Cart");
+
+        primaryStage.setTitle(appTitle + " / Dilmi Tharushika");
     }
 
     public static Locale getCurrentLocale() {
