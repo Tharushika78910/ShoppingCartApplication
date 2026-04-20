@@ -10,6 +10,10 @@ pipeline {
         IMAGE_NAME = 'dilmi222/shopping-cart-app'
         IMAGE_TAG = 'latest'
         SONARQUBE_SERVER = 'SonarQubeServer'
+
+        DB_URL = 'jdbc:mysql://localhost:3306/shopping_cart_localization'
+        DB_USER = 'root'
+        DB_PASSWORD = 'Dilmi2000@'
     }
 
     stages {
