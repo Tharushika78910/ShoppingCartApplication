@@ -1,3 +1,5 @@
+package com.example.shoppingcart;
+
 public class CartItem {
     private final double price;
     private final int quantity;

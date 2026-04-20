@@ -1,3 +1,5 @@
+package com.example.shoppingcart;
+
 import javafx.fxml.FXML;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
@@ -11,6 +13,11 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ShoppingCartController {
+
+    private static final Locale FINNISH = new Locale.Builder().setLanguage("fi").setRegion("FI").build();
+    private static final Locale SWEDISH = new Locale.Builder().setLanguage("sv").setRegion("SE").build();
+    private static final Locale JAPANESE = new Locale.Builder().setLanguage("ja").setRegion("JP").build();
+    private static final Locale ARABIC = new Locale.Builder().setLanguage("ar").setRegion("AR").build();
 
     @FXML
     private Label titleLabel;
@@ -65,13 +72,13 @@ public class ShoppingCartController {
         );
 
         Locale current = ShoppingCartApplication.getCurrentLocale();
-        if (current.equals(new Locale("fi", "FI"))) {
+        if (current.equals(FINNISH)) {
             languageComboBox.setValue("Finnish");
-        } else if (current.equals(new Locale("sv", "SE"))) {
+        } else if (current.equals(SWEDISH)) {
             languageComboBox.setValue("Swedish");
-        } else if (current.equals(new Locale("ja", "JP"))) {
+        } else if (current.equals(JAPANESE)) {
             languageComboBox.setValue("Japanese");
-        } else if (current.equals(new Locale("ar", "AR"))) {
+        } else if (current.equals(ARABIC)) {
             languageComboBox.setValue("Arabic");
         } else {
             languageComboBox.setValue("English");
@@ -106,10 +113,10 @@ public class ShoppingCartController {
         String selected = languageComboBox.getValue();
 
         Locale locale = switch (selected) {
-            case "Finnish" -> new Locale("fi", "FI");
-            case "Swedish" -> new Locale("sv", "SE");
-            case "Japanese" -> new Locale("ja", "JP");
-            case "Arabic" -> new Locale("ar", "AR");
+            case "Finnish" -> FINNISH;
+            case "Swedish" -> SWEDISH;
+            case "Japanese" -> JAPANESE;
+            case "Arabic" -> ARABIC;
             default -> Locale.US;
         };
 
@@ -226,10 +233,10 @@ public class ShoppingCartController {
     }
 
     private boolean isArabic(Locale locale) {
-        return locale.equals(new Locale("ar", "AR"));
+        return locale.equals(ARABIC);
     }
 
-    private void showError(String message) {
+    protected void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
         alert.setContentText(message);

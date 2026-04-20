@@ -1,3 +1,5 @@
+package com.example.shoppingcart;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,6 +30,14 @@ public class ShoppingCartApplication extends Application {
         }
     }
 
+    static String buildLanguageCode(Locale locale) {
+        return locale.getLanguage() + "_" + locale.getCountry();
+    }
+
+    static String buildWindowTitle(String appTitle) {
+        return appTitle + " / Dilmi Tharushika";
+    }
+
     private static void loadView() throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 ShoppingCartApplication.class.getResource("/shopping-cart-view.fxml")
@@ -40,7 +50,7 @@ public class ShoppingCartApplication extends Application {
         Map<String, String> texts = localizationService.getLocalizedStrings(getCurrentLanguageCode());
         String appTitle = texts.getOrDefault("app.title", "Shopping Cart");
 
-        primaryStage.setTitle(appTitle + " / Dilmi Tharushika");
+        primaryStage.setTitle(buildWindowTitle(appTitle));
     }
 
     public static Locale getCurrentLocale() {
@@ -48,8 +58,7 @@ public class ShoppingCartApplication extends Application {
     }
 
     public static String getCurrentLanguageCode() {
-        Locale locale = getCurrentLocale();
-        return locale.getLanguage() + "_" + locale.getCountry();
+        return buildLanguageCode(getCurrentLocale());
     }
 
     public static void main(String[] args) {

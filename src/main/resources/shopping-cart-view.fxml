@@ -12,7 +12,7 @@
 <VBox fx:id="rootVBox"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="ShoppingCartController"
+      fx:controller="com.example.shoppingcart.ShoppingCartController"
       spacing="12">
 
     <padding>

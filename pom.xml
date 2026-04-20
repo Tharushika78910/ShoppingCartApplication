@@ -15,7 +15,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
         <javafx.version>21</javafx.version>
-        <main.class>ShoppingCartApplication</main.class>
+        <main.class>com.example.shoppingcart.ShoppingCartApplication</main.class>
+        <sonar.projectKey>shopping-cart-app</sonar.projectKey>
     </properties>
 
     <dependencies>
@@ -44,6 +45,13 @@
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>21</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

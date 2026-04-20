@@ -1,3 +1,5 @@
+package com.example.shoppingcart;
+
 import java.util.List;
 
 public class CartCalculator {

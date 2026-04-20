@@ -1,14 +1,15 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "dilmi222/shopping-cart-app"
-        IMAGE_TAG = "latest"
-    }
-
     tools {
         maven 'Maven_3'
         jdk 'JDK 21'
+    }
+
+    environment {
+        IMAGE_NAME = 'dilmi222/shopping-cart-app'
+        IMAGE_TAG = 'latest'
+        SONARQUBE_SERVER = 'SonarQubeServer'
     }
 
     stages {
@@ -47,6 +48,14 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeServer') {
+                    bat 'mvn sonar:sonar'
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 bat 'docker build -t %IMAGE_NAME%:%IMAGE_TAG% .'
@@ -64,6 +73,15 @@ pipeline {
                     bat 'docker push %IMAGE_NAME%:%IMAGE_TAG%'
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Check the failed stage logs.'
         }
     }
 }
